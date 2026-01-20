@@ -4,3 +4,4 @@ data_clase_sql_enriquecida.csv filter=lfs diff=lfs merge=lfs -text
 dim_geografia.csv filter=lfs diff=lfs merge=lfs -text
 dim_productos.csv filter=lfs diff=lfs merge=lfs -text
 dim_usuarios.csv filter=lfs diff=lfs merge=lfs -text
+dim_customers.csv filter=lfs diff=lfs merge=lfs -text
