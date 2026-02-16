@@ -22,7 +22,7 @@ def generate_sales_data(n=2000000):
     base_date = datetime.datetime.now()
     # Generate random seconds offset for 2 years (approx)
     seconds_offset = np.random.randint(0, 63072000, n)
-    order_dates = [base_date - datetime.timedelta(seconds=int(x)) for x in seconds_offset]
+    order_dates = [(base_date - datetime.timedelta(seconds=int(x))).strftime('%Y-%m-%d') for x in seconds_offset]
     
     # --- Customer Generation (Consistent Profiles) ---
     print("Generating Customers...")
@@ -273,7 +273,12 @@ def generate_sales_data(n=2000000):
     if n_low > 0:
         payment_methods[mask_low_val] = np.random.choice(pm_opts, n_low, p=[0.10, 0.60, 0.30, 0.0])
 
-    shipping_statuses = np.random.choice(["Shipped", "Processing", "Delivered", "Cancelled"], n)
+    # Delivered 40%, Shipped 30%, Processing 20%, Cancelled 10%
+    shipping_statuses = np.random.choice(
+        ["Delivered", "Shipped", "Processing", "Cancelled"], 
+        n, 
+        p=[0.40, 0.30, 0.20, 0.10]
+    )
     
     # --- 2. Create DataFrame ---
     print("Assembling DataFrame...")
@@ -350,17 +355,9 @@ def generate_sales_data(n=2000000):
     # Whitespace in Product Name
     df["product_name"] = df["product_name"].apply(lambda x: f" {x} " if random.random() < 0.05 else x)
 
-    # 3.5 Inconsistent Types (Dates)
-    # Dirty dates: Convert some to invalid string formats
-    # First convert all to generic object/string to allow mixed types
-    # df["order_date"] is currently datetime64 (or object of datetimes).
-    
-    # To mix types in pandas, we usually need 'object' dtype
-    df["order_date"] = df["order_date"].astype(object)
-    
-    err_idx_date = df.sample(frac=0.01).index
-    # Assign invalid date strings
-    df.loc[err_idx_date, "order_date"] = "2024-13-01" 
+    # 3.5 Inconsistent Types (Dates) - FIXED per user request (No invalid dates)
+    # We ensure order_date remains as YYYY-MM-DD string
+    pass 
     
     # 3.6 Duplicates
     duplicates = df.sample(n=1000)
