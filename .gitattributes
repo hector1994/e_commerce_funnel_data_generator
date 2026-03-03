@@ -6,3 +6,4 @@ dim_productos.csv filter=lfs diff=lfs merge=lfs -text
 dim_usuarios.csv filter=lfs diff=lfs merge=lfs -text
 dim_customers.csv filter=lfs diff=lfs merge=lfs -text
 Customer_journey/ filter=lfs diff=lfs merge=lfs -text
+Customer[[:space:]]journey/ filter=lfs diff=lfs merge=lfs -text
